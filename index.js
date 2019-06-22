@@ -545,7 +545,6 @@ return  member.send(embed)
        .addField(':tools: **UTILITAIRES** :', '``u.avatar [user]``, ``u.bvn [user]`` , ``u.google [recherche]`` , ``u.youtube [recherche]`` , ``y.invite`` , ``y.meteo [ville]`` , ``y.calcul [calcul]``')
        .addField(':tada:  **FUN** :', '``u.8ball [questions]`` , ``u.pf [pile ou face]`` , ``u.reverse [mot]`` , ``u.meme``')
        .addField(':rotating_light: **Modérations** :', '``u.ban [user] [raison]`` , ``u.kick [user] [raison]`` , ``u.warn [user] [raison]`` , ``u.mute [user] [raison]`` , ``u.purge [2-100]`` , ``u.unmute [user]`` , ``u.addrole [user] [role]`` , ``u.removerole [user] [role]``')
-       .addField(':link:Liens' ,'[Invite moi](https://discordapp.com/api/oauth2/authorize?client_id=589825325219840022&permissions=8&scope=bot')
        .addField('•**Autres**', '**•Créé par DraLow.#9014**•')
        message.channel.send(helpembed);
 
