@@ -541,8 +541,8 @@ return  member.send(embed)
        let helpembed = new Discord.RichEmbed()
        .addField('•__**MENU AIDE**__•', 'Mon préfix est ``u.``')
        .setColor('#00fff2')
-       .addField(':information_source: ** INFORMATIONS **:', ' ``u.bot-info`` , ``u.serveur-info`` , ``u.rôle-info [rôle]``  , ``y.user-info [user]`` , ``u.ping`` ')
-       .addField(':tools: **UTILITAIRES** :', '``u.avatar [user]``, ``u.bvn [user]`` , ``u.google [recherche]`` , ``u.youtube [recherche]`` , ``y.invite`` , ``y.meteo [ville]`` , ``y.calcul [calcul]``')
+       .addField(':information_source: ** INFORMATIONS **:', ' ``u.bot-info`` , ``u.serveur-info`` , ``u.rôle-info [rôle]``  , ``u.user-info [user]`` , ``u.ping`` ')
+       .addField(':tools: **UTILITAIRES** :', '``u.avatar [user]``, ``u.bvn [user]`` , ``u.google [recherche]`` , ``u.youtube [recherche]`` , ``u .invite`` , ``u.meteo [ville]`` , ``u.calcul [calcul]``')
        .addField(':tada:  **FUN** :', '``u.8ball [questions]`` , ``u.pf [pile ou face]`` , ``u.reverse [mot]`` , ``u.meme``')
        .addField(':rotating_light: **Modérations** :', '``u.ban [user] [raison]`` , ``u.kick [user] [raison]`` , ``u.warn [user] [raison]`` , ``u.mute [user] [raison]`` , ``u.purge [2-100]`` , ``u.unmute [user]`` , ``u.addrole [user] [role]`` , ``u.removerole [user] [role]``')
        .addField('•**Autres**', '**•Créé par DraLow.#9014**•')
@@ -631,6 +631,7 @@ if(command ==='sondage'){
       
     })
 }
+
 
 });
 
