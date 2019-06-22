@@ -9,7 +9,7 @@ client.on('ready', () => {
 
 const settings = {
     prefix: 'u.',
-    token: 'NTkxODUxOTQyMzkzODA2ODY3.XQ2zRg.SubtUvF8-880lz1TGmRU_0S3Q4Y'
+    token: 'NTg5ODI1MzI1MjE5ODQwMDIy.XQ30nQ.ObhzMTrBms7d-vuk3PmyFd_A5L8'
   }
   client.on('message', async message => {
     let command = message.content.toLowerCase().slice(settings.prefix.length).split(' ')[0];
@@ -264,8 +264,8 @@ if (command === 'removerole') {
   .setColor("#00fff2")
   .setTitle(`Retirez un rôle`)
   .addField("Description:", "Retirer le rôle d'une personne", true)
-  .addField("Usage", "b!removerole [user] [role]", true)
-  .addField("Example", "b!removerole @TacosBurk#0000 Membre")
+  .addField("Usage", "u.removerole [user] [role]", true)
+  .addField("Example", "u.removerole @TacosBurk#0000 Membre")
 
 if(!message.member.hasPermission("MANAGE_ROLES")) return message.channel.send("Pour cela, vous avez besoin de la premission `MANAGE_ROLES`");
   let rMember = message.guild.member(message.mentions.users.first()) || message.guild.members.get(args[0]);
@@ -545,7 +545,7 @@ return  member.send(embed)
        .addField(':tools: **UTILITAIRES** :', '``u.avatar [user]``, ``u.bvn [user]`` , ``u.google [recherche]`` , ``u.youtube [recherche]`` , ``y.invite`` , ``y.meteo [ville]`` , ``y.calcul [calcul]``')
        .addField(':tada:  **FUN** :', '``u.8ball [questions]`` , ``u.pf [pile ou face]`` , ``u.reverse [mot]`` , ``u.meme``')
        .addField(':rotating_light: **Modérations** :', '``u.ban [user] [raison]`` , ``u.kick [user] [raison]`` , ``u.warn [user] [raison]`` , ``u.mute [user] [raison]`` , ``u.purge [2-100]`` , ``u.unmute [user]`` , ``u.addrole [user] [role]`` , ``u.removerole [user] [role]``')
-       .addField(':link:Liens' ,'[Invite moi](https://discordapp.com/api/oauth2/authorize?client_id=591851942393806867&permissions=8&scope=bot')
+       .addField(':link:Liens' ,'[Invite moi](https://discordapp.com/api/oauth2/authorize?client_id=589825325219840022&permissions=8&scope=bot')
        .addField('•**Autres**', '**•Créé par DraLow.#9014**•')
        message.channel.send(helpembed);
 
@@ -553,7 +553,7 @@ return  member.send(embed)
     let helpembed = new Discord.RichEmbed()
     .addField(" ℹ Invites", "-------------------")
     .setColor("#00fff2")
-    .addField("Invitation du bot", "https://discordapp.com/api/oauth2/authorize?client_id=591851942393806867&permissions=8&scope=bot")
+    .addField("Invitation du bot", "https://discordapp.com/api/oauth2/authorize?client_id=589825325219840022&permissions=8&scope=bot")
     .addField("Serveur du bot", "https://discord.gg/zjkWdnu")
     .setFooter("DraloW.#9014");
 
