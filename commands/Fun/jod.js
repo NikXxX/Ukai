@@ -1,15 +1,15 @@
 const Command = require("../../structures/Command.js"),
   Discord = require("discord.js");
 
-class Joke extends Command {
+class JokeDay extends Command {
   constructor(client) {
     super(client, {
-      name: "joke",
-      description: language => language.get("JOKE_DESCRIPTION"),
-      usage: language => language.get("JOKE_USAGE"),
-      examples: language => language.get("JOKE_EXEMPLES"),
+      name: "jod",
+      description: language => language.get("JOD_DESCRIPTION"),
+      usage: language => language.get("JOD_USAGE"),
+      examples: language => language.get("JOD_EXEMPLES"),
       enabled: true,
-      aliases: ["blague"],
+      aliases: ["bdj"],
       clientPermissions: ["EMBED_LINKS"],
       permLevel: 0,
       cooldown: 5000,
@@ -28,7 +28,7 @@ class Joke extends Command {
     if (this.client.settings.get(message.guild.id, "language") === "french") {
       axios({
         method: "get",
-        url: "https://blague.xyz/api/joke/random",
+        url: "https://blague.xyz/api/joke/day",
         responseType: "application/JSON",
         headers: {
           Authorization: token
@@ -36,7 +36,7 @@ class Joke extends Command {
       }).then(joke => {
         if (joke.data.status === 200) {
           embed
-            .setTitle("•__Blague__•")
+            .setTitle("•__Blague du jour__•")
             .setDescription(
               joke.data.joke.question + "\n||" + joke.data.joke.answer + "||"
             )
@@ -53,7 +53,7 @@ class Joke extends Command {
     } else {
       axios({
         method: "get",
-        url: "https://blague.xyz/api/joke/random?lang=en",
+        url: "https://blague.xyz/api/joke/day?lang=en",
         responseType: "application/JSON",
         headers: {
           Authorization: token
@@ -61,7 +61,7 @@ class Joke extends Command {
       }).then(joke => {
         if (joke.data.status === 200) {
           embed
-            .setTitle("•__Joke__•")
+            .setTitle("•__Joke of day__•")
             .setDescription(
               joke.data.joke.question + "\n||" + joke.data.joke.answer + "||"
             )
@@ -72,10 +72,10 @@ class Joke extends Command {
             );
           message.channel.send(embed);
         } else {
-          message.reply(`${this.client.config.emojis.error} | An error has occurred`);
+          message.reply(`${this.client.config.emojis.error} | An error has occurred !`);
         }
       });
     }
   }
 }
-module.exports = Joke;
+module.exports = JokeDay;
