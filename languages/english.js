@@ -10,6 +10,7 @@ module.exports = class {
       PERM_LEVELS: [
         "User",
         "Moderator",
+        "Super-Moderator",
         "Administrator",
         "Founder",
         "Ultimate"
@@ -19,6 +20,12 @@ module.exports = class {
         `${
           e.error
         } __**Missing permissions**__\n\nI need the following permissions for this command to work properly: ${perms
+          .map(p => "`" + p + "`")
+          .join(", ")}`,
+      ERR_CMD_USERS_PERMISSIONS: perms =>
+        `${
+          e.error
+        } __**Missing permissions**__\n\nYou need the following permissions for this command to work properly: ${perms
           .map(p => "`" + p + "`")
           .join(", ")}`,
       ERR_CMD_USER_PERMISSIONS: (levelName, userLevel) =>
@@ -88,8 +95,7 @@ module.exports = class {
       /* USERINFOS */
       USERINFOS_DESCRIPTION: "Show member information!",
       USERINFOS_USAGE: "userinfos [id | mention | pseudo | discriminateur]",
-      USERINFOS_EXEMPLES:
-        "$userinfos ShadowV\n$userinfos @ShadowV#9338\n$userinfos 9338",
+      USERINFOS_EXEMPLES: "$userinfos ShadowV", //$userinfos @ShadowV#9338 $userinfos 9338",
       USERINFOS_HEADING: [
         ":bust_in_silhouette: Username",
         ":id: ID",
@@ -175,10 +181,176 @@ module.exports = class {
       VDM_DESCRIPTION: "Tell a shit of life!",
       VDM_USAGE: "shitoflife",
       VDM_EXEMPLES: "shitoflife",
-       /* IMAGE */
-      IMAGE_DESCRIPTION: (endpoint) => `Generate an image ${endpoint} !`,
-      IMAGE_USAGE: (endpoint) => `${endpoint} [ username | id | mention | discriminator]`,
-      IMAGE_EXEMPLES: (endpoint) => `$${endpoint} ShadowV`
+      /* IMAGE */
+      IMAGE_DESCRIPTION: endpoint => `Generate an image ${endpoint} !`,
+      IMAGE_USAGE: endpoint =>
+        `${endpoint} [ username | id | mention | discriminator]`,
+      IMAGE_EXEMPLES: endpoint => `$${endpoint} ShadowV`,
+      /* INSTAGRAM */
+      INSTAGRAM_DESCRIPTION: "Displays information on an Instagram account !",
+      INSTAGRAM_USAGE: "instagram <username>",
+      INSTAGRAM_EXEMPLES: "$instagram Ninja",
+      INSTAGRAM_NO_NAME: `${e.error} | Please specify the name of the Instagram account.`,
+      INSTAGRAM_NAME_NOLONG: `${e.error} | Put a bigger nickname !`,
+      INSTAGRAM_ERROR: `${e.error} | I can't find this account!`,
+      INSTAGRAM_HEADING: [
+        "- `Username` : ",
+        "- `Name` : ",
+        "- `Biography` : ",
+        "- `Publications` : ",
+        "- `Followers` : ",
+        "- `Subscription` : ",
+        "- `Private account` : ",
+        "Yes :closed_lock_with_key:",
+        "No :unlock:"
+      ],
+      INSTAGRAM_NOT_PROVIDED: "Not provided",
+      /* SHORTURL COMMAND */
+
+      // Utils
+      SHORTURL_DESCRIPTION: "Shorten your link!",
+      SHORTURL_USAGE: "shorturl [url]",
+      SHORTURL_EXAMPLES: "$shorturl https://google.fr",
+      // Errors
+      SHORTURL_ERR_INVALID_URL: `${e.error} | Please enter a valid URL!`,
+      /* OPTION */
+      OPTION_DESCRIPTION: "Activate or deactivate the level system !",
+      OPTION_USAGE: "option <on/off>",
+      OPTION_EXEMPLES: "$option on\n$option off",
+      OPTION_NO_ARGS: `${e.error} | Please choose an option between "on" and "off" !`,
+      OPTION_ALREADY: choice =>
+        `${e.error} | The level system is already on ${choice} !`,
+      OPTION_SUCCESS: choice =>
+        `${e.success} | The level system is ${choice} !`,
+      /* LEVEL */
+      LEVELUP_MESSAGE: (user, level) =>
+        `Congratulations, <@${user}> you are now at the level ${level} !`,
+      LEVEL_NOT_ON: `${e.error} | The level system is not activate in this server !`,
+      /* RANK */
+
+      RANK_DESCRITION: "Displays your stats !",
+      RANK_USAGE: "rank [username | id | mention | discriminator]",
+      RANK_EXEMPLES: "$rank ShadowV\n$rank",
+      RANK_PROGRESSBAR: (curLevel, ProgressBar, nextLevel) => `${ProgressBar}`,
+      /* LANG */
+      LANG_DESCRIPTION: "Change Perry's language !",
+      LANG_USAGE: "setlang <french/english>",
+      LANG_EXEMPLES: "$setlang french\n$setlang english",
+      LANG_NO_ARGS: `${e.error} | Please choose a language between "french" and "english"!`,
+      LANG_ALREADY: choice => `${e.error} | I already ${choice} !`,
+      LANG_SUCCESS: choice => `${e.success} | Now I speak ${choice} !`,
+      /* GIVEAWAY COMMAND */
+
+      // Utils
+      GIVEAWAY_DESCRIPTION: "Manage your giveaways simply!",
+      GIVEAWAY_USAGE:
+        "giveaway [create/reroll/delete/end] (time) (winners count) (prize)",
+      GIVEAWAY_EXAMPLES:
+        "$giveaway create 10m 2 5$ PayPal !\n$giveaway reroll 597812898022031374",
+      // Errors
+      GIVEAWAY_ERR_STATUS: `${e.error} | You must specify \`create\`, \`reroll\` ou \`delete\`!`,
+      GIVEAWAY_ERR_CREATE: prefix =>
+        `${e.error} | You must enter the information in this format: \n\n\`${prefix}giveaway create [time] [winners count] [prize]\``,
+      GIVEAWAY_ERR_REROLL: `${e.error} | You must enter the ID of the giveaway message a re-rolled!`,
+      GIVEAWAY_ERR_DELETE: `${e.error} | You must enter the ID of the giveaway message to be deleted!`,
+      GIVEAWAY_ERR_END: `${e.error} | You must enter the ID of the giveaway message to be ended!`,
+      GIVEAWAY_ERR_REROLL_MSG_ENDED: messageID =>
+        `${e.error} | No giveaway **ended** found with message ID \`${messageID}\``,
+      GIVEAWAY_ERR_MESSAGE_NOT_FOUND: messageID =>
+        `${e.error} | No giveaway found with message ID \`${messageID}\``,
+      GIVEAWAY_ERR_15_DAYS: `${e.error} | The maximum length of a giveaway is 15 days.`,
+      GIVEAWAY_ERR_MAX: `${e.error} | A maximum of 4 Giveaways can be launched on the same server.`,
+      // Content
+      GIVEAWAY_CREATED: `${e.success} | Giveaway launched!`,
+      GIVEAWAY_REROLLED: `${e.success} | New draw done!`,
+      GIVEAWAY_DELETED: `${e.success} | Giveaway deleted!`,
+      GIVEAWAY_ENDED: `${e.success} | Giveaway in stop mode (-15 seconds)!`,
+      // Messages
+      GIVEAWAY_CREATE_MESSAGES: {
+        giveaway: "🎉🎉 **GIVEAWAY** 🎉🎉",
+        giveawayEnded: "🎉🎉 **GIVEAWAY ENDED** 🎉🎉",
+        timeRemaining: "Time remaining: **{duration}** !",
+        inviteToParticipate: "React with 🎉 to participate!",
+        winMessage: "Congratulations, {winners} ! You won **{prize}** !",
+        embedFooter: "Giveaways",
+        noWinner: "Giveaway cancelled, no valid participation.",
+        winners: "winner(s)",
+        endedAt: "End at",
+        units: {
+          seconds: "seconds",
+          minutes: "minutes",
+          hours: "hours",
+          days: "days"
+        }
+      },
+      GIVEAWAY_REROLL_MESSAGES: {
+        congrat: ":tada: New winner(s) : {winners}! Congratulations!",
+        error: "No valid entries, no winners can be chosen!"
+      },
+      /* WORK */
+      WORK_DESCRIPTION: "You work!",
+      WORK_USAGE: "work",
+      WORK_EXEMPLES: "$work\n $w",
+      WORK_TIME: time => `You're too tired to work, come back to ${time} !`,
+      WORK_MESSAGES: random => [
+        `You arrested 2 dealers, you got ${random} Perryen!`,
+        `The gangsters gave you $ {random} Perryen!`,
+        `You sold 3 sachets of drugs for ${random} Perryen!`,
+        `You just won ${random} Perryen in poker!`,
+        `A lawyer gave you ${random} Perryen so you wouldn't charge his client!`,
+        `You are helping the police arrest a corrupt lawyer. By doing so you got ${random} Perryen! `,
+        `You are faking evidence for a mafia leader accused of gangsterism.They gave you ${random} Perryen!`
+      ],
+      /* TOP */
+      TOP_DESCRIPTION: "Displays members classement !",
+      TOP_USAGE: "top",
+      TOP_EXEMPLES: "$top",
+      /* PLAY */
+      PLAY_DESCRIPTION: "Play muisic !",
+      PLAY_USAGE: "play <music>",
+      PLAY_EXEMPLES: "play falling",
+      NOW_PLAYING: song => `${e.success} | I'm playing ${song} !`,
+      PLAY_NO_MUSIC: `${e.error} | Please enter the song name !`,
+      ADD_TO_QUEUE: song => `${e.success} | ${song} as been add to the queue !`,
+      QUEUE_END: `${e.error} | There is any song in the queue !`,
+      CANT_FIND_MUSIC: `${e.error} | I can't find this music !`,
+      JOIN_CHANNEL: `${e.error} | Please join a voice channel !`,
+      SAME_CHANNEL: `${e.error} | You must me in the same voice channel as mine !`,
+      NOT_PLAYING: `${e.error} | I'm not playing muisc !`,
+      PAUSE_DESCRIPTION: `Pause the music!`,
+      RESUME_DESCRIPTION: `Resume the music!`,
+      SKIP_DESCRIPTION: `Skip the music !`,
+      STOP_DESCRIPTION: `Stop the music !`,
+      QUEUE_DESCRIPTION: `Displays the server queue !`,
+      VOLUME_DESCRIPTION: `Change the volume of music !`,
+      PAUSE_USAGE: "pause",
+      RESUME_USAGE: "resume",
+      SKIP_USAGE: "skip",
+      STOP_USAGE: "stop",
+      QUEUE_USAGE: "queue",
+      VOLUME_USAGE: "volume <1 à 100>",
+      RESUME_EXEMPLES: "$resume",
+      PAUSE_EXEMPLES: "$pause",
+      SKIP_EXEMPLES: "$skip",
+      STOP_EXEMPLES: "$stop",
+      QUEUE_EXEMPLES: "$queue",
+      VOLUME_EXEMPLES: "$volume 80",
+      SKIP_SUCCESS: `${e.success} | The music as been skiped !`,
+      PAUSE_SUCCESS: `${e.success} | The music as been paused !`,
+      RESUME_SUCCESS: `${e.success} | The music as been resumed !`,
+      STOP_SUCCESS: `${e.success} | The music as been stoped !`,
+      VOLUME_SUCCESS: volume =>
+        `${e.success} | The volume is now on \`${volume}\` !`,
+      QUEUE_MAX: `${e.error} | The queue is full !`,
+      /* WELCOME */
+      WELCOME_DESCRIPTION: "Set the welcome image !",
+      WELCOME_USAGE: "setwelcome <#channel> <image-url>",
+      WELCOME_EXEMPLES: "$setwelcome #join https://image.url/",
+      NO_CHANNEL: `${e.error} | Please ping a channel !`,
+      NO_URL: `${e.error} | Please include the url image !`,
+      WELCOME_SUCCESS: `${e.success} | The welcome image as been set !`,
+      WELCOME_IMAGE: member => `Welcome to the server , ${member}`,
+      WELCOME_MESSAGE: "Bienvenue sur le serveur ,"
     };
   }
 

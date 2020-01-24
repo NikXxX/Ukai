@@ -12,6 +12,7 @@ class Userinfos extends Command {
       enabled: true,
       aliases: ["ui"],
       clientPermissions: ["EMBED_LINKS"],
+      memberPermissions: [],
       permLevel: 0,
       cooldown: 5000,
       commandPath: __dirname,

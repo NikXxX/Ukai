@@ -5,7 +5,7 @@ module.exports = class {
   constructor(client) {
     this.client = client;
   }
-//settingd
+  //settingd
   async run(message) {
     const data = {};
 
@@ -18,27 +18,69 @@ module.exports = class {
 
     data.config = this.client.config;
     //database
-    this.client.settings.ensure(`${message.guild.id}`,{prefix: "p!",language: "english"})
+    this.client.settings.ensure(`${message.guild.id}`, {
+      prefix: "p!",
+      language: "english"
+    });
+    this.client.level.ensure(message.guild.id, { option: "off" });
+    this.client.level.ensure(`${message.guild.id}-${message.author.id}`, {
+      user: message.author.id,
+      guild: message.guild.id,
+      xp: 0,
+      level: 0
+    });
     // Gets language
-    let Language = require(`../languages/${this.client.settings.get(message.guild.id,"language")}.js`);
+    let Language = require(`../languages/${this.client.settings.get(
+      message.guild.id,
+      "language"
+    )}.js`);
     message.language = new Language();
+    this.client.economy.ensure(`${message.guild.id}-${message.author.id}`, {
+      guild: message.guild.id,
+      user: message.author.id,
+      money: 0,
+      cooldown: 0,
+      crimecooldown: 0
+    });
+    if (this.client.level.get(message.guild.id, "option") !== "off") {
+      const key = `${message.guild.id}-${message.author.id}`;
+      const xp = Math.floor(Math.random() * 10 + 1);
+      this.client.level.math(key, "+", xp, "xp");
 
+      const curLevel = Math.floor(
+        0.1 *
+          Math.sqrt(
+            this.client.level.get(
+              `${message.guild.id}-${message.author.id}`,
+              "xp"
+            )
+          )
+      );
+      if (this.client.level.get(key, "level") < curLevel) {
+        message.channel.send(
+          message.language.get("LEVELUP_MESSAGE", message.author.id, curLevel)
+        );
+        this.client.level.set(key, curLevel, "level");
+      }
+    }
     // Check if the bot was mentionned
     const prefixMention = new RegExp(`^<@!?${this.client.user.id}>( |)$`);
     if (message.content.match(prefixMention))
       return message.reply(
-        message.language.get("PREFIX_INFO", this.client.settings.get(message.guild.id,"prefix"))
+        message.language.get(
+          "PREFIX_INFO",
+          this.client.settings.get(message.guild.id, "prefix")
+        )
       );
 
     // Gets the prefix
-    let prefix = this.client.settings.get(message.guild.id,"prefix")
-    if (!prefix) return;
-
-    let args = message.content
+    let prefix = this.client.settings.get(message.guild.id, "prefix");
+    if (!message.content.startsWith(prefix)) return;
+    const args = message.content
       .slice(prefix.length)
       .trim()
       .split(/ +/g);
-    let command = args.shift().toLowerCase();
+    const command = args.shift().toLowerCase();
     let cmd =
       this.client.commands.get(command) ||
       this.client.commands.get(this.client.aliases.get(command));
@@ -62,7 +104,17 @@ module.exports = class {
         return message.channel.send(
           message.language.get("ERR_CMD_CLIENT_PERMISSIONS", neededPermissions)
         );
-
+      /* Member permissions */
+      const needPermissions = [];
+      cmd.conf.memberPermissions.forEach(permission => {
+        if (!message.channel.permissionsFor(message.member).has(permission)) {
+          needPermissions.push(permission);
+        }
+      });
+      if (needPermissions.length > 0)
+        return message.channel.send(
+          message.language.get("ERR_CMD_CLIENT_PERMISSIONS", needPermissions)
+        );
       /* User permissions */
       const permLevel = await this.client.getLevel(message);
       if (permLevel < cmd.conf.permLevel) {

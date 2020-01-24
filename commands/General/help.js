@@ -6,7 +6,7 @@ class Help extends Command {
     super(client, {
       // The name of the command
       name: "help",
-//      category: language => language.get("HELP_CATEGORIES")[4],
+      //      category: language => language.get("HELP_CATEGORIES")[4],
       // Whether the command is enabled, or not
       enabled: true,
       // Some command informations to display in the help command
@@ -17,6 +17,7 @@ class Help extends Command {
       aliases: ["h"],
       // The permissions needed by the bot to run the command
       clientPermissions: ["EMBED_LINKS"],
+      memberPermissions: [],
       // The level of permissions required by the user to run the command.
       permLevel: 0,
       // // The time it will take a user before he can execute the command again
@@ -109,17 +110,50 @@ class Help extends Command {
       .setFooter(data.config.embed.footer);
 
     /* FIELDS GEN */
-    categories.sort().forEach(cat => {
-      let commandsCategory = this.client.commands.filter(
-        cmd => cmd.help.category === cat
+
+    const commands = message.client.commands;
+
+    commands.forEach(command => {
+      if (!categories.includes(command.help.category)) {
+        if (
+          command.help.category === "Owner" &&
+          message.author.id !== message.client.config.owner.id
+        ) {
+          return;
+        }
+        categories.push(command.help.category);
+      }
+    });
+
+    let emojis = this.client.config.emojis;
+
+    let newembed = new Discord.MessageEmbed()
+      .setDescription(
+        message.language.get(
+          "HELP_SUBTITLE",
+          this.client.settings.get(message.guild.id, "prefix")
+        )
+      )
+      .setColor(data.config.embed.color)
+      .setFooter(data.config.embed.footer)
+      .setAuthor(
+        this.client.user.username,
+        this.client.user.displayAvatarURL({ format: "png" })
       );
-      embed.addField(
-        cat + " - (" + commandsCategory.size + ")",
-        commandsCategory.map(cmd => "`" + cmd.help.name + "`").join(", ")
+    categories.sort().forEach(cat => {
+      let tCommands = commands.filter(cmd => cmd.help.category === cat);
+      newembed.addField(
+        emojis.categories[cat.toLowerCase()] +
+          " " +
+          cat +
+          " - (" +
+          tCommands.size +
+          ")",
+        tCommands.map(cmd => "`" + cmd.help.name + "`").join(", ")
       );
     });
 
-    message.channel.send(embed);
+    message.channel.send(newembed);
   }
 }
 
